@@ -1,0 +1,10 @@
+web2py_dir=~/Desktop/cop315/web2py.app/Contents/Resources
+app_dir=$web2py_dir/applications/AttendancePlus
+cont_dir=$app_dir/controllers
+
+alias cdhome='cd $web2py_dir'
+alias cdapp='cd $app_dir'
+
+alias viapprc='vim $app_dir/.attendanceplus.rc'
+alias runc='cd $web2py_dir; python web2py.py -S attendanceplus -M'
+alias populate_db='cdhome; python web2py.py -S attendanceplus -M -R applications/AttendancePlus/populate_db.py'

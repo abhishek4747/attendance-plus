@@ -1,0 +1,60 @@
+{{extend 'layout.html'}}
+
+<h3>Course Code : {{=request.args[0].upper()}}</h3>
+<h4>Class Strength : {{=len(registered_students)}}</h4>
+
+{{if len(lectures)>0 and not lecture_time:}}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>S.no.</td>
+                <td>Lecture Timestamp</td>
+                <td>Attendance</td>
+                <td>Marked at</td>
+            </tr>
+        </thead>
+        <tbody>
+        {{for i,lecture in enumerate(lectures.keys()):}}
+            <tr>
+                <td>{{=i+1}}</td>
+				<td><a href="/attendance/{{=request.args[0]}}?lecture_time={{=lecture}}">{{=lecture}}</a></td>
+				<td>{{=len(lectures[lecture][0])}}</td>
+				<td>{{=timeHuman(lectures[lecture][1].updated_at)}}</td>
+            </tr>
+        {{pass}}
+        </tbody>
+    </table>
+</div>
+{{elif lecture_time and lecture_time in lectures:}}
+<h4>Lecture Timestamp : {{=lecture_time}}</h4>
+<br><a href="/attendance/{{=request.args[0]}}">&lt;--- Back</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>S.no.</td>
+                <td>Entry No.</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+            </tr>
+        </thead>
+        <tbody>
+        {{for i,u in enumerate(lectures[lecture_time][0]):}}
+			{{user = db(db.users.id==u.student_id).select().first()}}
+            <tr>
+                <td>{{=i+1}}</td>
+				<td>{{=user.entry_no}}</td>
+				<td>{{=user.first_name}}</td>
+				<td>{{=user.last_name}}</td>
+            </tr>
+        {{pass}}
+        </tbody>
+    </table>
+</div>
+{{elif lecture_time not in lectures and len(lectures)>0:}}
+	<h3>Invalid Lecture Time</h3>
+<br><a href="/attendance/{{=request.args[0]}}">&lt;--- Back</a>
+{{else:}}
+	<h3>No lectures so far</h3>
+{{pass}}

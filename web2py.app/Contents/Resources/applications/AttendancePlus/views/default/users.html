@@ -1,0 +1,35 @@
+{{extend 'layout.html'}}
+
+
+{{if len(users)>0:}}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>S.no.</td>
+                <td>Entry No.</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Email</td>
+                <td>Username</td>
+                <td>Type</td>
+            </tr>
+        </thead>
+        <tbody>
+        {{for i,user in enumerate(users):}}
+            <tr>
+                <td>{{=i+1}}</td>
+				<td>{{=user.entry_no}}</td>
+				<td>{{=user.first_name}}</td>
+				<td>{{=user.last_name}}</td>
+				<td>{{=user.email}}</td>
+				<td>{{=user.username}}</td>
+				<td>{{="Student" if not user.type_ else "Professor"}}</td>
+            </tr>
+        {{pass}}
+        </tbody>
+    </table>
+</div>
+
+<a href="/prints">Finger Prints of Users</a>
+{{pass}}

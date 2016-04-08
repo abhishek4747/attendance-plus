@@ -1,0 +1,198 @@
+timestamp: 2016-03-11T22:32:40.341054
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512)
+);
+success!
+timestamp: 2016-03-11T22:32:40.343549
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-03-11T22:32:40.345330
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2016-03-11T22:32:40.347599
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2016-03-11T22:32:40.349528
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-03-11T22:32:40.352315
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    created_on TIMESTAMP,
+    service CHAR(512),
+    ticket CHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2016-03-11T22:32:40.355007
+CREATE TABLE users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(128) UNIQUE,
+    username CHAR(100) UNIQUE,
+    entry_no CHAR(100) UNIQUE,
+    type_ INTEGER,
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512)
+);
+success!
+timestamp: 2016-03-11T22:32:40.356804
+CREATE TABLE user_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-03-11T22:32:40.358832
+CREATE TABLE user_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES user_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2016-03-11T22:32:40.360629
+CREATE TABLE user_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES user_group (id) ON DELETE CASCADE  ,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2016-03-11T22:32:40.362784
+CREATE TABLE user_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2016-03-11T22:32:40.364558
+CREATE TABLE static_vars(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) UNIQUE,
+    int_value INTEGER,
+    string_value CHAR(512)
+);
+success!
+timestamp: 2016-03-11T22:32:40.366308
+CREATE TABLE user_vars(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    name CHAR(512),
+    int_value INTEGER,
+    string_value CHAR(512)
+);
+success!
+timestamp: 2016-03-11T22:32:40.368521
+CREATE TABLE classrooms(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    room CHAR(512) UNIQUE,
+    capacity INTEGER
+);
+success!
+timestamp: 2016-03-11T22:32:40.370326
+CREATE TABLE semesters(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    year_ INTEGER,
+    semester INTEGER
+);
+success!
+timestamp: 2016-03-11T22:32:40.372570
+CREATE TABLE courses(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    code CHAR(512),
+    description CHAR(512),
+    credits INTEGER,
+    l_t_p CHAR(512)
+);
+success!
+timestamp: 2016-03-11T22:32:40.374351
+CREATE TABLE slots(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    days CHAR(512),
+    starting_time TIME,
+    ending_time TIME
+);
+success!
+timestamp: 2016-03-11T22:32:40.376186
+CREATE TABLE registered_courses(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course INTEGER REFERENCES courses (id) ON DELETE CASCADE  ,
+    classroom INTEGER REFERENCES classrooms (id) ON DELETE CASCADE  ,
+    prof_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    semester INTEGER REFERENCES semesters (id) ON DELETE CASCADE  ,
+    slot INTEGER REFERENCES slots (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2016-03-11T22:32:40.378363
+CREATE TABLE student_registrations(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    registered_course INTEGER REFERENCES registered_courses (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2016-03-11T22:32:40.380366
+CREATE TABLE fingerprints(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    finger1 CHAR(512),
+    finger2 CHAR(512),
+    finger3 CHAR(512),
+    finger4 CHAR(512),
+    finger5 CHAR(512),
+    updated_at TIMESTAMP
+);
+success!
+timestamp: 2016-03-11T22:32:40.382155
+CREATE TABLE lectures(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course INTEGER REFERENCES registered_courses (id) ON DELETE CASCADE  ,
+    time_ TIMESTAMP,
+    updated_at TIMESTAMP
+);
+success!
+timestamp: 2016-03-11T22:32:40.384250
+CREATE TABLE attendance(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER REFERENCES users (id) ON DELETE CASCADE  ,
+    lecture INTEGER REFERENCES lectures (id) ON DELETE CASCADE  
+);
+success!
+success!
